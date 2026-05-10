@@ -24,7 +24,7 @@ public class ContactController {
 
             CreateEmailOptions emailRequest = CreateEmailOptions.builder()
                     .from("onboarding@resend.dev")
-                    .to("bleronzekaj@icloud.com")
+                    .to("bleronzekaj17@gmail.com")
                     .subject("Portfolio - meddelande från " + request.getName())
                     .html(
                             "<p><strong>Namn:</strong> " + request.getName() + "</p>" +

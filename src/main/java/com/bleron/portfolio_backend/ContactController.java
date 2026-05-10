@@ -9,7 +9,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/contact")
 @CrossOrigin(origins = {
         "http://localhost:3000",
-        "https://bleron-portfolio-fe.vercel.app"
+        "https://bleron-portfolio-fe.vercel.app",
+        "https://bleron-portfolio-jtzpjd6mg-bleron-s-projects.vercel.app"
 })
 public class ContactController {
 

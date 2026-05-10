@@ -37,6 +37,8 @@ public class ContactController {
             return ResponseEntity.ok("Skickat!");
 
         } catch (Exception e) {
+            System.err.println("FEL: " + e.getMessage());
+            e.printStackTrace();
             return ResponseEntity.status(500).body("Fel: " + e.getMessage());
         }
     }

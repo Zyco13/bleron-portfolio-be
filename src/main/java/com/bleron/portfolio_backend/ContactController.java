@@ -1,8 +1,8 @@
 package com.bleron.portfolio_backend;
-
+import com.resend.Resend;
+import com.resend.services.emails.model.CreateEmailOptions;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -14,25 +14,30 @@ import org.springframework.web.bind.annotation.*;
 })
 public class ContactController {
 
-    private final JavaMailSender mailSender;
-
-    public ContactController(JavaMailSender mailSender) {
-        this.mailSender = mailSender;
-    }
+    @Value("${resend.api.key}")
+    private String resendApiKey;
 
     @PostMapping
     public ResponseEntity<String> sendMessage(@RequestBody ContactRequest request) {
-        SimpleMailMessage mail = new SimpleMailMessage();
-        mail.setFrom("bleronzekaj17@gmail.com");
-        mail.setTo("bleronzekaj@icloud.com");
-        mail.setSubject("Portfolio - meddelande från " + request.getName());
-        mail.setText(
-                "Namn: " + request.getName() + "\n" +
-                        "Email: " + request.getEmail() + "\n\n" +
-                        request.getMessage()
-        );
+        try {
+            Resend resend = new Resend(resendApiKey);
 
-        mailSender.send(mail);
-        return ResponseEntity.ok("Skickat!");
+            CreateEmailOptions emailRequest = CreateEmailOptions.builder()
+                    .from("onboarding@resend.dev")
+                    .to("bleronzekaj@icloud.com")
+                    .subject("Portfolio - meddelande från " + request.getName())
+                    .html(
+                            "<p><strong>Namn:</strong> " + request.getName() + "</p>" +
+                                    "<p><strong>Email:</strong> " + request.getEmail() + "</p>" +
+                                    "<p><strong>Meddelande:</strong> " + request.getMessage() + "</p>"
+                    )
+                    .build();
+
+            resend.emails().send(emailRequest);
+            return ResponseEntity.ok("Skickat!");
+
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Fel: " + e.getMessage());
+        }
     }
 }

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 })
 public class ContactController {
 
-    @Value("${resend.api.key}")
+    @Value("${RESEND_API_KEY:}")
     private String resendApiKey;
 
     @PostMapping
